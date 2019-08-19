@@ -84,4 +84,4 @@ async def on_member_update(before, after):
                 await after.edit(nick="Não!")
 
 client.loop.create_task(atualizar_stats())
-client.run('NjEyNDMxNzk4OTk1MjU1MzM3.XVnwtw.AYuU3Vv8V_oE_zd1DT8-1_5-W1k')
+client.run('NjEyNDMxNzk4OTk1MjU1MzM3.XVnxrA._mDq7Qa0lb5dlhHbyJEMm-iOIUY')
