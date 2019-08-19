@@ -1,5 +1,5 @@
-import discord
 from discord.ext.commands import Bot
+import discord
 import discord.ext.tasks
 import time
 import asyncio
@@ -9,10 +9,10 @@ import random
 messages = joined = 0
 
 async def atualizar_stats():
-    await client.wait_until_ready()
+    await bot.wait_until_ready()
     global messages, joined
 
-    while not client.is_closed():
+    while not bot.is_closed():
         try:
             with open("stats.txt", "a") as f:
                 f.write(f"Hora: {int(time.time())}, Mensagens: {messages}, Membros que se juntaram: {joined}\n")
@@ -25,7 +25,7 @@ async def atualizar_stats():
             print(e)
             await asyncio.sleep(5)
 
-client = Bot(command_prefix="!")
+bot = Bot(command_prefix="!")
 
 def read_token():
     with open("token.txt", "r") as f:
@@ -36,17 +36,17 @@ def read_token():
 token = read_token()
 
 # Sends a ready message on_ready() to the console
-@client.event
+@bot.event
 async def on_ready():
     print('Bot ready.')
 
 
-@client.event
+@bot.event
 async def on_message(message):
     global messages
     messages += 1
 
-    id = client.get_guild(611817575600488449)
+    id = bot.get_guild(611817575600488449)
     valid_users = ["ferreirA#1058", "Wenty#9784"]
 
     if message.content.find("!clear") != -1:
@@ -74,7 +74,7 @@ async def on_message(message):
             await message.channel.send(content=None, embed=embed)
 
 # Prints when a member joins a server which has this bot running
-@client.event
+@bot.event
 async def on_member_join(member):
     global joined
     joined += 1
@@ -84,7 +84,7 @@ async def on_member_join(member):
             await channel.send(f'{member.mention}, {random.choice(responses)}, seja bem vindo!')
 
 # Prints when a member lefts a server which has this bot running
-@client.event
+@bot.event
 async def on_member_remove(member):
     global joined
     joined -= 1
@@ -94,7 +94,7 @@ async def on_member_remove(member):
             await channel.send(f'{member.mention}, acabou de sair do servidor, hasta la vista!')
 
 
-# @client.event # This event runs whenever a user updates: status, game playing, avatar, nickname or role
+# @bot.event # This event runs whenever a user updates: status, game playing, avatar, nickname or role
 # async def on_member_update(before, after):
 #    n = after.nick
 #    if n: # Check if they updated their username
@@ -105,8 +105,8 @@ async def on_member_remove(member):
 #            else: # Otherwise set it to "NO STOP THAT"
 #                await after.edit(nick="Não!")
 
-client.loop.create_task(atualizar_stats())
+bot.loop.create_task(atualizar_stats())
 #try:
-client.run(token)
+bot.run(token)
 #except discord.errors.LoginFailure as e:
     #print("Login unsuccessful.")
