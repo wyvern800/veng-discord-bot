@@ -1,6 +1,5 @@
 import os
 from discord.ext.commands import Bot
-from boto.s3.connection import S3Connection
 import discord
 import discord.ext.tasks
 import time
