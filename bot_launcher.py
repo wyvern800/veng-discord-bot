@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands, tasks
 import time
 import asyncio
 
@@ -22,7 +23,7 @@ async def atualizar_stats():
             print(e)
             await asyncio.sleep(5)
 
-client = discord.Client()
+client = commands.Bot(command_prefix = '!')
 
 
 # Sends a ready message on_ready() to the console
@@ -82,4 +83,4 @@ async def on_member_update(before, after):
                 await after.edit(nick="Não!")
 
 client.loop.create_task(atualizar_stats())
-client.run("NjEyNDMxNzk4OTk1MjU1MzM3.XVntgg.-JZt6beYJY0cyzV6u7huo_4Nie8")
+client.run("NjEyNDMxNzk4OTk1MjU1MzM3.XVnuyA.lVuP5ACiImuGEJnF_bDjU3BxhVM")
