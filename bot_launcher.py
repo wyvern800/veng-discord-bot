@@ -6,8 +6,6 @@ import asyncio
 import random
 
 
-
-
 messages = joined = 0
 
 async def atualizar_stats():
@@ -49,12 +47,15 @@ async def on_message(message):
     messages += 1
 
     id = client.get_guild(611817575600488449)
-    valid_users = ["ferreirA#1058"]
+    valid_users = ["ferreirA#1058", "Wenty#9784"]
 
-    if message.content.find("!clear") != -1 and str(message.author) in valid_users:
-        await message.channel.send(f'Pronto, eu limpei todas as mensagens!')
-        await message.channel.purge()
-
+    if message.content.find("!clear") != -1:
+        if str(message.author) in valid_users:
+            await message.channel.send(f'Pronto, eu limpei todas as mensagens!')
+            await message.channel.purge()
+        else:
+            await message.channel.send(f'Você não tem permissão para usar este comando!')
+            await message.channel.purge(limit=2)
     # Comando usado para trocar on nickname instantaneo
     if str(message.channel) == "poste-seu-rsn-aqui":
             await message.author.edit(nick=message.content)
@@ -69,7 +70,7 @@ async def on_message(message):
         elif message.content == "!ajuda":
             embed = discord.Embed(title="Ajuda com o BOT?", description="Alguns comandos úteis")
             embed.add_field(name="!usuarios", value="Mostra a quantidade de usuários no discord")
-            embed.add_field(name="!users", value="Prints number of users")
+            embed.add_field(name="!ola", value="Dê um oi para o bot")
             await message.channel.send(content=None, embed=embed)
 
 # Prints when a member joins a server which has this bot running
@@ -77,10 +78,7 @@ async def on_message(message):
 async def on_member_join(member):
     global joined
     joined += 1
-    responses = [
-        'acabou de mamar piteno',
-        'está na phome de dinheiro e veio pedir esmola pro clan',
-        'viu a oportunidade de brilhar e entrou pro clan']
+    responses = ['acabou de mamar piteno', 'está na phome de dinheiro e veio pedir esmola pro clan', 'viu a oportunidade de brilhar e entrou pro clan']
     for channel in member.guild.channels:
         if str(channel) == "novos-membros":  # We check to make sure we are sending the message in the general channel
             await channel.send(f'{member.mention}, {random.choice(responses)}, seja bem vindo!')
@@ -96,19 +94,19 @@ async def on_member_remove(member):
             await channel.send(f'{member.mention}, acabou de sair do servidor, hasta la vista!')
 
 
-@client.event # This event runs whenever a user updates: status, game playing, avatar, nickname or role
-async def on_member_update(before, after):
-    n = after.nick
-    if n: # Check if they updated their username
-        if n.lower().count("theusin") or n.lower().count("wenty") > 0: # If username contains tim
-            last = before.nick
-            if last: # If they had a usernae before change it back to that
-                await after.edit(nick=last)
-            else: # Otherwise set it to "NO STOP THAT"
-                await after.edit(nick="Não!")
+# @client.event # This event runs whenever a user updates: status, game playing, avatar, nickname or role
+# async def on_member_update(before, after):
+#    n = after.nick
+#    if n: # Check if they updated their username
+#        if n.lower().count("theusin") or n.lower().count("wenty") > 0: # If username contains tim
+#            last = before.nick
+#            if last: # If they had a usernae before change it back to that
+#                await after.edit(nick=last)
+#            else: # Otherwise set it to "NO STOP THAT"
+#                await after.edit(nick="Não!")
 
 client.loop.create_task(atualizar_stats())
-try:
-    client.run(token)
-except discord.errors.LoginFailure as e:
-    print("Login unsuccessful.")
+#try:
+client.run(token)
+#except discord.errors.LoginFailure as e:
+    #print("Login unsuccessful.")
