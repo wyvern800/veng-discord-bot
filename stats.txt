@@ -44,3 +44,4 @@ Hora: 1566173254, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566173259, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566173264, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566173269, Mensagens: 0, Membros que se juntaram: 0
+Hora: 1566174614, Mensagens: 0, Membros que se juntaram: 0

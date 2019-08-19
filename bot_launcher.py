@@ -25,14 +25,6 @@ async def atualizar_stats():
 client = discord.Client()
 
 
-def read_token():
-    with open("token.txt", "r") as f:
-        lines = f.readlines()
-        return lines[0].strip()
-
-
-token = read_token()
-
 # Sends a ready message on_ready() to the console
 @client.event
 async def on_ready():
@@ -90,4 +82,4 @@ async def on_member_update(before, after):
                 await after.edit(nick="Não!")
 
 client.loop.create_task(atualizar_stats())
-client.run(token)
+client.run("NjEyNDMxNzk4OTk1MjU1MzM3.XVntgg.-JZt6beYJY0cyzV6u7huo_4Nie8")
