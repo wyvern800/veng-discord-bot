@@ -1,10 +1,13 @@
 import os
 from discord.ext.commands import Bot
 import discord
-import discord.ext.tasks
+import random
+from discord.ext import commands, tasks
+from itertools import cycle
 import time
 import asyncio
-import random
+import requests
+import asyncio
 
 messages = joined = 0
 
@@ -29,6 +32,7 @@ async def atualizar_stats():
             await asyncio.sleep(5)
 
 bot = Bot(command_prefix="!")
+status = cycle(['💎 Vengeance BR 💎', 'Digite !ajuda para obter minha ajuda!', 'O melhor clã brasileiro!', 'Digite !ajuda para obter minha ajuda','Junte-se a nós', 'Digite !ajuda para obter minha ajuda','Join FC: Vengeance BR', 'Bot programado by Theusin', 'Digite !ajuda para obter minha ajuda'])
 
 def read_token():
     with open("token.txt", "r") as f:
@@ -41,8 +45,8 @@ token = read_token()
 # Sends a ready message on_ready() to the console
 @bot.event
 async def on_ready():
+    change_status.start()
     print('Bot ready.')
-
 
 @bot.event
 async def on_message(message):
@@ -81,7 +85,9 @@ async def on_message(message):
 async def on_member_join(member):
     global joined
     joined += 1
-    responses = ['acabou de mamar piteno', 'está na phome de dinheiro e veio pedir esmola pro clan', 'viu a oportunidade de brilhar e entrou pro clan']
+    responses = ['acabou de mamar piteno', 'está na phome de dinheiro e veio pedir esmola pro clan',
+                 'viu a oportunidade de brilhar e entrou', 'está acenando para todos ao entrar no server',
+                 'look at this dude, look at the top of his hair']
     for channel in member.guild.channels:
         if str(channel) == "novos-membros":  # We check to make sure we are sending the message in the general channel
             await channel.send(f'{member.mention}, {random.choice(responses)}, seja bem vindo!')
@@ -107,6 +113,11 @@ async def on_member_remove(member):
 #                await after.edit(nick=last)
 #            else: # Otherwise set it to "NO STOP THAT"
 #                await after.edit(nick="Não!")
+
+@tasks.loop(seconds=10)
+async def change_status():
+    await bot.change_presence(activity=discord.Game(next(status)))
+
 
 bot.loop.create_task(atualizar_stats())
 #try:
