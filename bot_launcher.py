@@ -1,8 +1,12 @@
 import discord
+from discord.ext.commands import Bot
+import discord.ext.tasks
 import time
 import asyncio
 import random
-from discord.ext import commands, tasks
+
+
+
 
 messages = joined = 0
 
@@ -23,8 +27,7 @@ async def atualizar_stats():
             print(e)
             await asyncio.sleep(5)
 
-client = discord.Client()
-client = commands.Bot(command_prefix = '!')
+client = Bot(command_prefix="!")
 
 def read_token():
     with open("token.txt", "r") as f:
@@ -57,14 +60,15 @@ async def on_message(message):
             await message.author.edit(nick=message.content)
             await message.channel.purge(limit=1)
 
-    if str(message.channel) == "converse-com-os-bots":
-        if message.content.find("!hello") != -1:
-            await message.channel.send("Hi")
+    # Comandos que só irão funcionar no chat-room interagir-com-os-bots
+    if str(message.channel) == "interagir-com-os-bots":
+        if message.content.find("!ola") != -1:
+            await message.channel.send("Oi")
         elif message.content == "!usuarios":
-            await message.channel.send(f"""Quantidade de Membros {id.member_count}""")
+            await message.channel.send(f"""Quantidade de Membros: {id.member_count}""")
         elif message.content == "!ajuda":
-            embed = discord.Embed(title="Ajuda com o BOT", description="Some useful commands")
-            embed.add_field(name="!hello", value="Greets the user")
+            embed = discord.Embed(title="Ajuda com o BOT?", description="Alguns comandos úteis")
+            embed.add_field(name="!usuarios", value="Mostra a quantidade de usuários no discord")
             embed.add_field(name="!users", value="Prints number of users")
             await message.channel.send(content=None, embed=embed)
 
@@ -91,6 +95,7 @@ async def on_member_remove(member):
         if str(channel) == "despedidas":  # We check to make sure we are sending the message in the general channel
             await channel.send(f'{member.mention}, acabou de sair do servidor, hasta la vista!')
 
+
 @client.event # This event runs whenever a user updates: status, game playing, avatar, nickname or role
 async def on_member_update(before, after):
     n = after.nick
@@ -103,4 +108,7 @@ async def on_member_update(before, after):
                 await after.edit(nick="Não!")
 
 client.loop.create_task(atualizar_stats())
-client.run(token)
+try:
+    client.run(token)
+except discord.errors.LoginFailure as e:
+    print("Login unsuccessful.")
