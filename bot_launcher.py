@@ -1,12 +1,16 @@
+import os
 from discord.ext.commands import Bot
+from boto.s3.connection import S3Connection
 import discord
 import discord.ext.tasks
 import time
 import asyncio
 import random
 
-
 messages = joined = 0
+
+# Se estou hosteando no meu pc deve estar True
+localhost = bool(False)
 
 async def atualizar_stats():
     await bot.wait_until_ready()
@@ -107,6 +111,9 @@ async def on_member_remove(member):
 
 bot.loop.create_task(atualizar_stats())
 #try:
-bot.run(token)
+if localhost:
+    bot.run(token)
+else:
+    bot.run(str(os.environ.get('BOT_TOKEN')))
 #except discord.errors.LoginFailure as e:
     #print("Login unsuccessful.")

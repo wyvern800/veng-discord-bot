@@ -2634,3 +2634,4 @@ Hora: 1566248981, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566248986, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566248991, Mensagens: 0, Membros que se juntaram: 0
 Hora: 1566248998, Mensagens: 0, Membros que se juntaram: 0
+Hora: 1566249851, Mensagens: 0, Membros que se juntaram: 0
