@@ -67,6 +67,7 @@ async def on_member_join(member):
     for channel in member.guild.channels:
         if str(channel) == "novos-membros":  # We check to make sure we are sending the message in the general channel
             await channel.send(f'{member.mention}, {random.choice(responses)}, seja bem vindo!')
+            await member.add_roles(discord.utils.get(member.guild.roles, name="Integrantes"))  # add the role
 
 # Prints when a member lefts a server which has this bot running
 @bot.event
@@ -94,30 +95,69 @@ async def on_member_remove(member):
 @bot.command(pass_context=True)
 @commands.cooldown(1, 5, type=BucketType.user)
 async def cox(ctx, quantity: int):
+    group = ""
+    emoji = bot.get_emoji(613623783298826240)
     if 0 <= quantity <= 5:   # Tier 0
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 0')
+        group = "CoX: Tier 0"
     elif 5 <= quantity <= 24:    # Tier 1
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 1')
+        group = "CoX: Tier 1"
     elif 25 <= quantity <= 74:    # Tier 2
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 2')
+        group = "CoX: Tier 2"
     elif 75 <= quantity <= 149:  # Tier 3
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 3')
+        group = "CoX: Tier 3"
     elif 150 <= quantity <= 499:  # Tier 4
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 4')
+        group = "CoX: Tier 4"
     elif quantity >= 500:  # Tier 5
-        await add_role_based_on_kc(ctx, quantity, 'CoX: Tier 5')
-# Errors for cox command
+        group = "CoX: Tier 5"
+    await remove_roles(ctx, True)
+    await add_role_based_on_kc(ctx, quantity, group, "CoX", str(emoji))
+# # Errors for cox command
 @cox.error
 async def cox_error(ctx, error):
     await get_errors(ctx, error)
 
 
+@bot.command(pass_context=True)
+@commands.cooldown(1, 5, type=BucketType.user)
+async def tob(ctx, quantity: int):
+    group = ""
+    emoji = bot.get_emoji(613623796737245184)
+    if 0 <= quantity <= 10:   # Aprendiz
+        group = "ToB: Aprendiz"
+    elif 10 <= quantity <= 49:    # Intermediário
+        group = "ToB: Intermediário"
+    elif 50 <= quantity <= 99:    # Competente
+        group = "ToB: Competente"
+    elif 100 <= quantity <= 249:  # Experiente
+        group = "ToB: Experiente"
+    elif quantity >= 250:  # Elite
+        group = "ToB: Elite"
+    await remove_roles(ctx, False)
+    await add_role_based_on_kc(ctx, quantity, group, "ToB", str(emoji))
+# # Errors for cox command
+@tob.error
+async def tob_error(ctx, error):
+    await get_errors(ctx, error)
+
+
 # Adiciona role ao membro baseado no KC dele
-async def add_role_based_on_kc(ctx, quantity, role_name):
+async def add_role_based_on_kc(ctx, quantity, group, kctype, emoji):
     await ctx.channel.purge(limit=1)
-    await ctx.channel.send(f':dragon_face:  De acordo com o seu KC, que é **{quantity}** completions, seu grupo do CoX foi alterado para **{role_name}**!')
-    await ctx.message.author.add_roles(discord.utils.get(ctx.guild.roles, name=role_name))
-    await ctx.message.delete()
+    await ctx.author.add_roles(discord.utils.get(ctx.author.guild.roles, name=group))  # add the role
+    await ctx.channel.send(f'{emoji} De acordo com o seu KC, que é **{quantity}** completions, seu grupo do **{kctype}** foi alterado para **{group}**!')
+    await asyncio.sleep(1)
+    await ctx.channel.purge(limit=1)
+
+
+# Remove as roles
+async def remove_roles(ctx, cox: bool):
+    if cox:
+        for index in range(0, 6):
+            await ctx.author.remove_roles(discord.utils.get(ctx.author.guild.roles, name="CoX: Tier "+str(index)))  # remove the role
+    else:
+        groups = ["Aprendiz", "Intermediário", "Competente", "Experiente", "Elite"]
+        for index in range(0, 5):
+            await ctx.author.remove_roles(discord.utils.get(ctx.author.guild.roles, name="ToB: "+str(groups[index])))  # remove the role
 
 # Eight ball command
 @bot.command(aliases=['8ball'])
@@ -222,7 +262,7 @@ async def get_errors(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await manipulate_error(ctx, "Este comando está em cooldown!")
     elif isinstance(error, commands.MissingRequiredArgument):
-        await manipulate_error(ctx, "Você precisa ao menos digitar um nick de RuneScape para que o comando funcione!")
+        await manipulate_error(ctx, "Está faltando algum parâmetro no seu comando!")
     elif isinstance(error, commands.MissingPermissions):
         await manipulate_error(ctx, "Você não tem permissões para usar este comando!")
     elif isinstance(error, commands.BotMissingPermissions):
