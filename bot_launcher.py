@@ -9,7 +9,7 @@ import asyncio
 
 # Autor: Matheus Ferreira
 # Se estou hosteando no meu pc deve estar True
-localhost = bool(True)
+localhost = bool(False)
 # Declarando as variáveis
 messages = joined = 0
 # Declarando o prefixo utilizado nos comandos
